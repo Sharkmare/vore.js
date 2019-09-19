@@ -75,7 +75,12 @@ function modehandling(mode=0)
 
 
 function messagehandler()
-{}
+{
+var mymessage="this";
+var lastmessage="that";
+var currentmessage="these";
+
+}
 
 function handleslosh(hp,o,s,mode) //Handles actual damage being taken as well as escape/trap
 {
