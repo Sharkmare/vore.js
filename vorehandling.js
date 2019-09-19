@@ -80,6 +80,37 @@ var mymessage="this";
 var lastmessage="that";
 var currentmessage="these";
 
+function unstamp(stamp)
+{
+sanity = stamp.split("T")
+sanity = sanity.join(":")
+sanity = sanity.split("+")
+sanity = sanity.join(":")
+sanity = sanity.split(":")
+return sanity
+}
+function restamp(sanity)
+{
+unstamp(stamp)
+ISOtoVAR(stamp)
+return restamp =`${td}T${th}:${tm}:${ts}+00:00`
+}
+function ISOtoOBJ(stamp)
+{
+  unstamp(stamp)
+  ISOtoVAR(stamp)
+  objSTAMP = {
+  date : parseInt(td),
+  hour : parseInt(th),
+  minute : parseInt(tm),
+  second : parseFloat(ts),
+}
+}
+function ISOtoVAR(stamp)
+{
+td = sanity[0]; th = sanity[1]; tm = sanity[2];ts = sanity[3]
+}
+
 }
 
 function handleslosh(hp,o,s,mode) //Handles actual damage being taken as well as escape/trap
