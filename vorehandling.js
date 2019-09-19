@@ -1,4 +1,6 @@
 timeout= 1*1000
+mode=0
+modes = [0,1,2,3] //0 = firstrun (devour), 1 = sloshing (progress), 2 = succumb (end),3= escape
 organs = 
 [
   {name:"maw",damage:1,trapto:"throat",escapeto:"freedom",
@@ -39,16 +41,41 @@ var healthbar;
 console.log(organs)
 hp=prey.hp
 selected = "stomach"
+
 function slosh(hp,o,s)
 { //console.clear()//this purges the console.
   healthbar = hpbar(hp)
-  console.log(healthbar)
-
-
+  //console.log(healthbar)
+  modehandling(mode)
+  if(HpIsZero(hp)) {mode=2}
+  else {mode=1}  
 if (HpIsZero(hp)) return succumb(o,s)
 
 handleslosh(hp,o,s) //restarts slosh process
 }
+
+function modehandling(mode=0)
+{
+  switch (mode)
+  {
+    case 0: 
+      
+      return "start"
+    case 1: 
+      
+      return "progress"
+    case 2: 
+      
+      return "loss"
+    case 3:
+      
+      return "win"
+    default: 
+      return "error"
+      
+  }
+}
+
 
 function messagehandler()
 {}
