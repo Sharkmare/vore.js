@@ -38,36 +38,43 @@ prey = {hp:100}
 
 var healthbar;
 hp=prey.hp
-selected = "stomach"
+selected = "maw"
 
 function slosh(hp,o,s)
 { 
   healthbar = hpbar(hp)
-  if (selected == "freedom") {return modehandling(3)}
-  if(!HpIsZero(hp)) {modehandling(1)}
-  if(HpIsZero(hp)) {return modehandling(2)}
+  console.log(healthbar)
+  if (!mode){modehandling(0,hp);mode=1}
+  if (selected == "freedom") {return mstate = modehandling(3,hp)}
+  if(!HpIsZero(hp)) {mstate = modehandling(1,hp)}
+  if(HpIsZero(hp)) {return mstate = modehandling(2,hp)}
   
 
 handleslosh(hp,o,s,mode) //restarts slosh process
 }
 
-function modehandling(mode=0)
+function modehandling(mode=0,hp)
 {
   switch (mode)
   {
     case 0: 
       console.log("Encounter starts.")
+      console.log(`Entered ${selected}`)
       return "start"
     case 1: 
-      console.log("HP lost.")
+      //console.log(`sloshing in ${selected}`)
+      //console.log(`${hp} hp left`)
       return "progress"
     case 2: 
-      console.log("You died.")
+      console.log("You lost.")
+      console.log(`${hp} hp left`)
       return "loss"
     case 3:
       console.log("You won.")
+      console.log(`${hp} hp left`)
       return "win"
     default: 
+      console.log("error")
       return "error"
       
   }
@@ -118,14 +125,19 @@ function handleslosh(hp,o,s,mode) //Handles actual damage being taken as well as
 hp=hp-o.filter(e=>e.name == selected)[0].damage
 organ = o.filter(e=>e.name == selected)
 
-
-if (Math.trunc(Math.random()*10) == organ[0].escapechance ) 
+doweescape=Math.trunc(Math.random()*10)
+if (doweescape == organ[0].escapechance ) 
 {
 
   console.log("Moved from " + selected + " to " + organ[0].escapeto )
 selected=organ[0].escapeto
 }
+else if ( doweescape == organ[0].trapchance )
+{
 
+  console.log("Moved from " + selected + " to " + organ[0].trapto )
+selected=organ[0].trapto
+}
 
 setTimeout(function(){
 
