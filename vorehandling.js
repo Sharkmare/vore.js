@@ -23,7 +23,7 @@ organs =
     {key:"post",message:"text 2"}
     ],escapechance:2,trapchance:5
   },
-  {name:"stomach",damage:4,trapto:"stomach",escapeto:"throat",
+  {name:"stomach",damage:10,trapto:"stomach",escapeto:"throat",
   messages:[
     {key:"pre",message:"text 1"},
     {key:"mid",message:"text 1"},
@@ -37,21 +37,18 @@ organs =
 prey = {hp:100}
 
 var healthbar;
-
-console.log(organs)
 hp=prey.hp
 selected = "stomach"
 
 function slosh(hp,o,s)
-{ //console.clear()//this purges the console.
+{ 
   healthbar = hpbar(hp)
-  //console.log(healthbar)
-  modehandling(mode)
-  if(HpIsZero(hp)) {mode=2}
-  else {mode=1}  
-if (HpIsZero(hp)) return succumb(o,s)
+  if (selected == "freedom") {return modehandling(3)}
+  if(!HpIsZero(hp)) {modehandling(1)}
+  if(HpIsZero(hp)) {return modehandling(2)}
+  
 
-handleslosh(hp,o,s) //restarts slosh process
+handleslosh(hp,o,s,mode) //restarts slosh process
 }
 
 function modehandling(mode=0)
@@ -59,16 +56,16 @@ function modehandling(mode=0)
   switch (mode)
   {
     case 0: 
-      
+      console.log("Encounter starts.")
       return "start"
     case 1: 
-      
+      console.log("HP lost.")
       return "progress"
     case 2: 
-      
+      console.log("You died.")
       return "loss"
     case 3:
-      
+      console.log("You won.")
       return "win"
     default: 
       return "error"
@@ -80,13 +77,23 @@ function modehandling(mode=0)
 function messagehandler()
 {}
 
-function handleslosh(hp,o,s) //Handles actual damage being taken as well as escape/trap
+function handleslosh(hp,o,s,mode) //Handles actual damage being taken as well as escape/trap
 {
 hp=hp-o.filter(e=>e.name == selected)[0].damage
+organ = o.filter(e=>e.name == selected)
+
+
+if (Math.trunc(Math.random()*10) == organ[0].escapechance ) 
+{
+
+  console.log("Moved from " + selected + " to " + organ[0].escapeto )
+selected=organ[0].escapeto
+}
+
 
 setTimeout(function(){
 
-slosh(hp,o,s)
+slosh(hp,o,s,mode)
 },timeout)
 }
 
@@ -104,7 +111,9 @@ function HpIsZero(hp) //Checks hp being 0. returns true if 0
 {
   return (hp<!0)
 }
-function succumb(o,s) //Handles "player" losing.
-{}
+function succumb(o,s,mode) //Handles "player" losing.
+{modehandling(mode)
+
+}
 
 slosh(prey.hp,organs,selected) //Process()
